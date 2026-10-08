@@ -140,12 +140,24 @@ object SpotifyPlaybackResolver {
                         filter = YouTube.SearchFilter.FILTER_SONG,
                     ).getOrNull()
 
-                var candidates =
+                    var candidates =
                     songSearchResult?.items
                         ?.filterIsInstance<SongItem>()
                         ?.filter { (it.duration ?: 0) > 0 }
                         ?.distinctBy { it.id }
                         .orEmpty()
+
+                if (candidates.isNotEmpty()) {
+                    val targetTitle = track.name.lowercase()
+                    val accurateCandidates = candidates.filter { candidate ->
+                        val ytTitle = candidate.title.lowercase()
+                        targetTitle.split(" ").any { cuvant -> cuvant.length > 2 && ytTitle.contains(cuvant) }
+                    }
+                    if (accurateCandidates.isNotEmpty()) {
+                        candidates = accurateCandidates
+                    }
+                }
+
 
                 var dec =
                     if (candidates.isNotEmpty()) {
