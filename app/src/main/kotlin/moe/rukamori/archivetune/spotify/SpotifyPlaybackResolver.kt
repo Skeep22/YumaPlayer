@@ -120,7 +120,7 @@ object SpotifyPlaybackResolver {
                 "isrc=${track.externalIds?.isrc}, explicit=${track.explicit}",
             )
 
-            val query = SpotifyQueryBuilder.buildSearchQuery(track)
+            val query = "${track.name} ${artistsList.firstOrNull() ?: ""}"
             Timber.tag("SpotifyMatching").d("QUERY: '$query'")
 
             val trackQuery =
